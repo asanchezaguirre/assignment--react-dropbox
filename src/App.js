@@ -1,0 +1,21 @@
+import React, { Component } from 'react';
+import Home from "./components/Home";
+
+
+
+class App extends Component {
+  render() {
+    return (
+        <React.Fragment>	
+         
+      		<Home file = {this.props.file}/>
+       
+     	</React.Fragment>
+
+    );
+  }
+}
+
+export default App;
+
+
