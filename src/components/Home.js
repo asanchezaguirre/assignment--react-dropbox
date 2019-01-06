@@ -1,4 +1,5 @@
 import React, { Component} from 'react';
+import moment from 'moment'
 
 
 
@@ -8,10 +9,11 @@ class Home extends Component{
 
     this.state = {
       data : this.props.file,
-      functions : []
-      
+      functions : [],
+      total: 0
     };
   }
+
   //Funcionalidad Search input
   searchByName = (e) => {
     var query = e.target.value.toLowerCase();
@@ -27,15 +29,26 @@ class Home extends Component{
     });
   }
 
-  //Funcionalidad del botón
+  //Funcionalidad del botón //Agregar los archivos seleccionados
 
   filterBySelect(select){
     var nameAdd = this.props.file.filter((type) => {
       return type.id === select
+    })[0]
+    //Método every devuelve un boolean 
+    var notDuplicate = this.state.functions.every((functions)=>{
+      return functions !== nameAdd;
     });
+
+    if(notDuplicate){
     this.setState({
-      functions: nameAdd
+      //Agregar varios elementos, de lo contrario sòlo se ponìa uno a la vez
+      functions: [...this.state.functions, nameAdd],
+      //funciòn de suma
+      total: this.state.total + parseInt(nameAdd.size)
+    
     });
+  }
 
   }
   //Acaba funcionalidad del botón
@@ -57,7 +70,7 @@ class Home extends Component{
 								</span>
 								<p className="file__meta">
 								    <span className="file__name">{datos.name}</span> <br />
-								    <span>{datos.added_at} · {datos.category}</span>
+								    <span>Added: {moment(datos.added_at, "YY"). fromNow()} · {datos.category}</span>
 								</p>
 							</div>
 						    <button onClick = {() => this.filterBySelect(datos.id)} className="file__button">
@@ -72,13 +85,19 @@ class Home extends Component{
        		</div>
        		<div className= "add">
        		<h2>COMPRESS</h2>
-       			<ul>
+          <h3>TOTAL:  {this.state.total} KB</h3>
+       			<div>
             		{ this.state.functions.map(type => {
               			return (
-                		<li>{ type.name }</li>
+              			<div>	
+	                		<div>{ type.name }</div>
+	                		<div>{ type.size }</div>
+	                	</div>
+
               		);
            		 }) }
-          		</ul>
+          		</div>
+          
 
 			</div>
      	</div>
